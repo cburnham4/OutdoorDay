@@ -11,7 +11,8 @@
 - App icon, privacy manifest, listing copy, GitHub Pages privacy/support (live)
 - Bundle ID + App Store provisioning profile (`Outdoor Day App Store 202611012142`)
 - Screenshots in `fastlane/screenshots/en-US/` (6.5 / 6.7 / 6.9)
-- Signed IPA: `build/OutdoorDay.ipa` (ATT + SKAd rebuild 2026-11-02 12:20 EST)
+- Outdoor Day Plus **3-day outlook** shipped in-app (UV/AQI/pollen)
+- Signed IPA: `build/OutdoorDay.ipa` (outlook rebuild 2026-11-02 12:35 EST)
 - Ship helpers:
   - `bash scripts/asc_ship_all.sh` — ship + finish in one shot
   - `ruby scripts/asc_ship.rb` — IPA + listing metadata
