@@ -12,7 +12,8 @@
 - Bundle ID + App Store provisioning profile (`Outdoor Day App Store 202611012142`)
 - Screenshots in `fastlane/screenshots/en-US/` (6.5 / 6.7 / 6.9)
 - Outdoor Day Plus **3-day outlook** shipped in-app (UV/AQI/pollen)
-- Signed IPA: `build/OutdoorDay.ipa` (outlook rebuild 2026-11-02 12:35 EST)
+- Signed IPA: `build/OutdoorDay.ipa` (rebuild 2026-11-02 14:17 EST)
+- `bash scripts/open_asc_create.sh` opens ASC + shows New App fields; wait-and-ship notifies while blocked
 - Ship helpers:
   - `bash scripts/asc_ship_all.sh` — ship + finish in one shot
   - `ruby scripts/asc_ship.rb` — IPA + listing metadata

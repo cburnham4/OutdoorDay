@@ -1,9 +1,10 @@
-Outdoor Day is a utility that shows a simple outdoor verdict from location-based UV, pollen, and US AQI (Open-Meteo).
+Outdoor Day is a utility that shows a simple outdoor verdict from location-based UV, pollen, and US AQI (Open-Meteo + US pollen fallback).
 
 Demo:
-1. Grant location when prompted (or deny and use the last known / error state).
+1. Grant location when prompted (or deny — the app shows a location-off message).
 2. Home screen shows Go / Go with care / Better stay in plus UV, pollen, and AQI chips.
-3. Banner ads appear at the bottom for free users (Google test units in this build).
-4. Tap Outdoor Day Plus to purchase the non-consumable remove-ads unlock (StoreKit product us.letshang.outdoor_day.remove_ads). Sandbox account can be used.
+3. App Tracking Transparency may appear once (AdMob). Choose either option; ads still load with Google test units in this build.
+4. Free users see a bottom banner and an “Unlock Outdoor Day Plus” card.
+5. Tap Unlock Outdoor Day Plus to buy the non-consumable us.letshang.outdoor_day.remove_ads ($2.99) — removes ads and unlocks the 3-day outlook. Use a Sandbox Apple ID.
 
-No account required. Not medical advice.
+No account required. Not medical advice. Export compliance: ITSAppUsesNonExemptEncryption=false.

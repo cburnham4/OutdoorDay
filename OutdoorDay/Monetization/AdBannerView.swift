@@ -14,10 +14,17 @@ struct AdBannerView: UIViewRepresentable {
         Coordinator(adUnitID: adUnitID)
     }
 
+    private static var skipAds: Bool {
+        UserDefaults.standard.bool(forKey: "skipATT")
+            || ProcessInfo.processInfo.arguments.contains("-skipATT")
+            || ProcessInfo.processInfo.environment["SKIP_ATT"] == "1"
+    }
+
     func makeUIView(context: Context) -> UIView {
         let container = UIView()
         container.backgroundColor = .clear
         container.clipsToBounds = true
+        if Self.skipAds { return container }
 
         let banner = BannerView(adSize: AdSizeBanner)
         banner.adUnitID = adUnitID
@@ -53,6 +60,15 @@ struct AdBannerView: UIViewRepresentable {
 
         func scheduleLoad() {
             Task { @MainActor in
+                #if DEBUG
+                if UserDefaults.standard.bool(forKey: "skipATT")
+                    || ProcessInfo.processInfo.arguments.contains("-skipATT")
+                    || ProcessInfo.processInfo.environment["SKIP_ATT"] == "1" {
+                    return
+                }
+                #endif
+                // Also honor skipATT outside DEBUG for screenshot tooling defaults.
+                if UserDefaults.standard.bool(forKey: "skipATT") { return }
                 AdsService.shared.whenReady { [weak self] in
                     guard let self, !self.hasLoaded, let banner = self.bannerView else { return }
                     banner.rootViewController = AdsService.topViewController

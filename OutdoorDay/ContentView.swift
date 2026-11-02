@@ -10,6 +10,12 @@ struct ContentView: View {
     @EnvironmentObject private var purchases: PurchaseManager
     @State private var showPaywall = false
 
+    private static var skipAdsForScreenshots: Bool {
+        UserDefaults.standard.bool(forKey: "skipATT")
+            || ProcessInfo.processInfo.arguments.contains("-skipATT")
+            || ProcessInfo.processInfo.environment["SKIP_ATT"] == "1"
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -42,7 +48,7 @@ struct ContentView: View {
                 .refreshable { await model.refresh() }
             }
             .safeAreaInset(edge: .bottom) {
-                if !purchases.isPremium {
+                if !purchases.isPremium && !Self.skipAdsForScreenshots {
                     AdBannerView()
                         .frame(height: 50)
                         .background(.ultraThinMaterial)
@@ -130,9 +136,9 @@ struct ContentView: View {
                     )
                     MetricChip(
                         title: conditions.pollenLabel,
-                        value: conditions.pollenGrains.map { String(format: "%.0f", $0) } ?? "N/A",
+                        value: conditions.pollenGrains.map { String(format: "%.0f", $0) } ?? "—",
                         band: VerdictEngine.pollenBand(conditions.pollenGrains),
-                        bandOverride: conditions.pollenGrains == nil ? "Unavailable" : nil
+                        bandOverride: conditions.pollenGrains == nil ? "Limited here" : nil
                     )
                     MetricChip(
                         title: "AQI",
@@ -146,9 +152,15 @@ struct ContentView: View {
 
     private var upgradeCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Go ad-free")
-                .font(.headline)
-            Text("Remove the banner and unlock a simple 3-day outdoor outlook.")
+            HStack(alignment: .firstTextBaseline) {
+                Text("Go ad-free")
+                    .font(.headline)
+                Spacer(minLength: 8)
+                Text(purchases.product?.displayPrice ?? "$2.99")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            Text("One-time unlock: remove the banner and get a 3-day outdoor outlook.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Button {
