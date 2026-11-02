@@ -30,6 +30,11 @@ while true; do
       notify "Outdoor Day blocked" "Create ASC app us.letshang.outdoor-day (SKU outdoor-day-001)."
       # Surface the create checklist without requiring a chat reply.
       bash scripts/open_asc_create.sh >/dev/null 2>&1 || true
+      {
+        echo "Outdoor Day still waiting for ASC New App — $(date '+%Y-%m-%d %H:%M %Z')"
+        echo "Bundle: us.letshang.outdoor-day | SKU: outdoor-day-001"
+        echo "Open: https://appstoreconnect.apple.com/apps"
+      } >"$HOME/Desktop/CREATE_OUTDOOR_DAY_ASC.txt"
     fi
     sleep "$INTERVAL"
     continue

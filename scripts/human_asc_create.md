@@ -28,6 +28,13 @@ App → App Privacy → Get Started / Edit:
 
 Source draft: `fastlane/app_privacy.json`
 
-## Optional for first revenue
+## After create (first revenue)
 
-Create AdMob iOS app + banner under publisher `ca-app-pub-8223005482588566`, then replace test IDs in `AdConfig.swift` / `Info.plist` and rebuild IPA.
+IAP (`us.letshang.outdoor_day.remove_ads`, $2.99) is created/submitted by `asc_finish.rb` automatically — that path can earn without AdMob.
+
+For ad revenue, create an AdMob iOS app + banner under publisher `ca-app-pub-8223005482588566`, then set in `OutdoorDay/Info.plist` (no code change needed):
+
+- `GADApplicationIdentifier` = AdMob App ID (`…~…`)
+- `GADBannerAdUnitID` = Banner unit ID (`…/…`)
+
+Rebuild/export IPA and upload a follow-up build.
