@@ -152,9 +152,15 @@ struct ContentView: View {
 
     private var upgradeCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Go ad-free")
-                .font(.headline)
-            Text("Remove the banner and unlock a simple 3-day outdoor outlook.")
+            HStack(alignment: .firstTextBaseline) {
+                Text("Go ad-free")
+                    .font(.headline)
+                Spacer(minLength: 8)
+                Text(purchases.product?.displayPrice ?? "$2.99")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            Text("One-time unlock: remove the banner and get a 3-day outdoor outlook.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Button {
