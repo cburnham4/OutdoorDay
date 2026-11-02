@@ -2,6 +2,8 @@
 
 API keys cannot create apps (`apps` CREATE → 403). Browser automation has no valid Apple session.
 
+Quick open: `bash scripts/open_asc_create.sh`
+
 ## Create app (required)
 
 1. Sign in at https://appstoreconnect.apple.com/apps
@@ -13,7 +15,7 @@ API keys cannot create apps (`apps` CREATE → 403). Browser automation has no v
 7. SKU: **outdoor-day-001**
 8. User Access: Full Access
 
-After save, the hourly poll / `bash scripts/asc_ship_all.sh` uploads IPA, listing, IAP ($2.99), screenshots, and submits.
+After save, `asc_wait_and_ship` (or `bash scripts/asc_ship_all.sh`) uploads IPA, listing, IAP ($2.99), screenshots, and submits.
 
 ## App Privacy nutrition label (required for submit; not in public API)
 
