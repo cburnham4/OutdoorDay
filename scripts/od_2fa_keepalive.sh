@@ -34,5 +34,9 @@ while true; do
     echo "$(date) restarting desktop bridge" >>"$LOG"
     bash scripts/od_2fa_desktop_bridge.sh >> build/od_2fa_bridge.log 2>&1 &
   fi
+  if ! pgrep -f 'scripts/od_2fa_clipboard_watch.sh' >/dev/null; then
+    echo "$(date) restarting clipboard watch" >>"$LOG"
+    bash scripts/od_2fa_clipboard_watch.sh >> build/od_2fa_clipboard.log 2>&1 &
+  fi
   sleep 60
 done
