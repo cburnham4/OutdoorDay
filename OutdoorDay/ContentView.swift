@@ -136,9 +136,9 @@ struct ContentView: View {
                     )
                     MetricChip(
                         title: conditions.pollenLabel,
-                        value: conditions.pollenGrains.map { String(format: "%.0f", $0) } ?? "N/A",
+                        value: conditions.pollenGrains.map { String(format: "%.0f", $0) } ?? "—",
                         band: VerdictEngine.pollenBand(conditions.pollenGrains),
-                        bandOverride: conditions.pollenGrains == nil ? "Unavailable" : nil
+                        bandOverride: conditions.pollenGrains == nil ? "Limited here" : nil
                     )
                     MetricChip(
                         title: "AQI",

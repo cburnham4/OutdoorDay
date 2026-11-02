@@ -196,7 +196,7 @@ struct OpenMeteoClient {
         else { return [:] }
 
         var request = URLRequest(url: url)
-        request.timeoutInterval = 8
+        request.timeoutInterval = 20
         do {
             let (data, response) = try await session.data(for: request)
             guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
@@ -205,6 +205,7 @@ struct OpenMeteoClient {
             let decoded = try JSONDecoder().decode(SocialPollenResponse.self, from: data)
             return decoded.mappedByDay
         } catch {
+            // Soft-fail: US Open-Meteo pollen is often null; social host may be unreachable.
             return [:]
         }
     }
