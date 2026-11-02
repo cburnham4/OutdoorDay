@@ -15,12 +15,16 @@ struct OpenMeteoClient {
     }
 
     func fetchConditions(latitude: Double, longitude: Double) async throws -> DayConditions {
-        let aq = try await fetchAirQuality(latitude: latitude, longitude: longitude)
-        let uvFallback = try? await fetchForecastUV(latitude: latitude, longitude: longitude)
+        async let aqTask = fetchAirQuality(latitude: latitude, longitude: longitude)
+        async let uvTask = fetchDayUV(latitude: latitude, longitude: longitude)
+        let aq = try await aqTask
+        let dayUV = try? await uvTask
 
+        // Prefer today's max UV so nighttime launches still reflect the day.
+        let uv = dayUV ?? aq.current.uv_index
         let pollen = aq.bestPollen
         return DayConditions(
-            uvIndex: aq.current.uv_index ?? uvFallback,
+            uvIndex: uv,
             usAqi: aq.current.us_aqi,
             pollenGrains: pollen.value,
             pollenLabel: pollen.label,
@@ -46,17 +50,22 @@ struct OpenMeteoClient {
         return try JSONDecoder().decode(AirQualityPayload.self, from: data)
     }
 
-    private func fetchForecastUV(latitude: Double, longitude: Double) async throws -> Double? {
+    private func fetchDayUV(latitude: Double, longitude: Double) async throws -> Double? {
         var components = URLComponents(string: "https://api.open-meteo.com/v1/forecast")!
         components.queryItems = [
             URLQueryItem(name: "latitude", value: String(latitude)),
             URLQueryItem(name: "longitude", value: String(longitude)),
             URLQueryItem(name: "current", value: "uv_index"),
+            URLQueryItem(name: "daily", value: "uv_index_max"),
+            URLQueryItem(name: "forecast_days", value: "1"),
             URLQueryItem(name: "timezone", value: "auto")
         ]
         let (data, response) = try await session.data(from: components.url!)
         try Self.validate(response)
         let decoded = try JSONDecoder().decode(ForecastPayload.self, from: data)
+        if let max = decoded.daily.uv_index_max?.first {
+            return max
+        }
         return decoded.current.uv_index
     }
 
@@ -103,8 +112,13 @@ private struct CurrentAQ: Decodable {
 
 private struct ForecastPayload: Decodable {
     let current: CurrentForecast
+    let daily: DailyForecast
 }
 
 private struct CurrentForecast: Decodable {
     let uv_index: Double?
+}
+
+private struct DailyForecast: Decodable {
+    let uv_index_max: [Double]?
 }

@@ -15,13 +15,19 @@
   - https://cburnham4.github.io/OutdoorDay/support.html
 - Apple Developer **bundle ID** created: `us.letshang.outdoor-day` (with In-App Purchase capability)
 
-## Blocked (needs you in Apple / AdMob consoles)
+## Also ready locally
 
-1. **Create the App Store Connect app** for bundle `us.letshang.outdoor-day`  
-   ASC API key cannot CREATE apps (GET/UPDATE only). Log into [App Store Connect](https://appstoreconnect.apple.com/apps) → **+** → New App → iOS → Outdoor Day → bundle `us.letshang.outdoor-day`.
-2. **Create IAP** “Outdoor Day Plus” product ID `us.letshang.outdoor_day.remove_ads` (Non-Consumable, $2.99).
-3. **AdMob**: create Outdoor Day app under publisher `ca-app-pub-8223005482588566`, put real App ID in `Info.plist` `GADApplicationIdentifier` and banner unit in `AdConfig.swift`.
-4. Archive & upload first build, attach screenshots (6.7"), set age rating, submit.
+- Release **xcarchive** builds (`/tmp/OutdoorDay.xcarchive` on the build machine)
+- App Store screenshots in `fastlane/screenshots/en-US/` (6.5" + 6.7")
+
+## Blocked (needs you — ~10 minutes)
+
+1. **Sign into Xcode** with `cburnham@letshang.us` (export failed: “No Accounts” / no profiles for the new bundle).
+2. **Create the App Store Connect app** for bundle `us.letshang.outdoor-day`  
+   ASC API key cannot CREATE apps. [App Store Connect](https://appstoreconnect.apple.com/apps) → **+** → New App → iOS → Outdoor Day → bundle `us.letshang.outdoor-day`.
+3. **Create IAP** “Outdoor Day Plus” product ID `us.letshang.outdoor_day.remove_ads` (Non-Consumable, ~$2.99).
+4. **AdMob**: create Outdoor Day app under publisher `ca-app-pub-8223005482588566`; put real App ID in `Info.plist` and banner unit in `AdConfig.swift` (currently Google test units).
+5. After 1–2: reply here and we export/upload, attach screenshots + metadata, submit.
 
 ## Local open
 

@@ -130,8 +130,9 @@ struct ContentView: View {
                     )
                     MetricChip(
                         title: conditions.pollenLabel,
-                        value: conditions.pollenGrains.map { String(format: "%.0f" , $0) } ?? "—",
-                        band: VerdictEngine.pollenBand(conditions.pollenGrains)
+                        value: conditions.pollenGrains.map { String(format: "%.0f", $0) } ?? "N/A",
+                        band: VerdictEngine.pollenBand(conditions.pollenGrains),
+                        bandOverride: conditions.pollenGrains == nil ? "Unavailable" : nil
                     )
                     MetricChip(
                         title: "AQI",
@@ -192,6 +193,7 @@ private struct MetricChip: View {
     let title: String
     let value: String
     let band: RiskBand
+    var bandOverride: String? = nil
 
     var body: some View {
         VStack(spacing: 8) {
@@ -200,9 +202,9 @@ private struct MetricChip: View {
                 .foregroundStyle(.secondary)
             Text(value)
                 .font(.system(.title2, design: .rounded).weight(.bold))
-            Text(band.rawValue)
+            Text(bandOverride ?? band.rawValue)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(band.tint)
+                .foregroundStyle(bandOverride == nil ? band.tint : Color.secondary)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
