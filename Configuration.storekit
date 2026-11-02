@@ -1,0 +1,34 @@
+{
+  "identifier" : "OutdoorDayStore",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "A1B2C3D4",
+      "localizations" : [
+        {
+          "description" : "Remove ads and unlock the multi-day outdoor outlook.",
+          "displayName" : "Outdoor Day Plus",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "us.letshang.outdoor_day.remove_ads",
+      "referenceName" : "Outdoor Day Plus",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "0",
+    "_developerTeamID" : "56NQ7Z9L75"
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

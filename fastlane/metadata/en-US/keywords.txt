@@ -1,0 +1,1 @@
+uv index,pollen,allergies,air quality,AQI,allergy,sun safety,outdoor,hay fever,asthma

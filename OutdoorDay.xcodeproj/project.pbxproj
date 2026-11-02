@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0FBE3837BD549A01AC618F0E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC40AB9050D10DED64A93A2 /* Assets.xcassets */; };
+		1D6F7A74230D73FD72B0EF28 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0C20005A9AB0489FB7EB72 /* ContentView.swift */; };
+		2B82FCC5536E4917888393E4 /* OpenMeteoClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6D3C64542262718691D09 /* OpenMeteoClient.swift */; };
+		300E6980ED582DA9C21B3385 /* OutdoorDayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF292A2BD077464E8B04F0C7 /* OutdoorDayApp.swift */; };
+		431B8EA8EBFD3719B135692D /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = B836BCF4301FB363717607E7 /* GoogleMobileAds */; };
+		4A19A07EBF854A8EA28795DE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA79751881B0574C77A41EE /* Foundation.framework */; };
+		4BD87F3DB393A354C151354B /* DayPlannerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A6EB2DDBC0D60A2E8479AA /* DayPlannerModel.swift */; };
+		6307BE37C12649C656F96891 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA79751881B0574C77A41EE /* Foundation.framework */; };
+		671511935E7D1C66575B6035 /* DayConditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5178274D29722A47FBEA8D9B /* DayConditions.swift */; };
+		7F3ADC15B30FB93CB7CFA32C /* AdsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CDDD71E7E9A941753A15A3B /* AdsService.swift */; };
+		96DD8F3098A6AD239A6EB1CB /* AdBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59E499508FCBDE5114FDE /* AdBannerView.swift */; };
+		B12A8242E08604D8C5295197 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E5AE1E92624B0BE0C214CA /* LocationManager.swift */; };
+		B7CC0E716A5F22B2896F6492 /* AdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5CCF46A08DC75EE1F9BCAB /* AdConfig.swift */; };
+		CC69E6704A2DADCD30C38CB9 /* VerdictEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D29D842A1A7374CE983D25 /* VerdictEngineTests.swift */; };
+		DE5383DFA42EB180867E756A /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF30B62DEE75B6DA1635BCE4 /* PurchaseManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		989D1862E39CCDF80EDAF765 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C9A6A42315997A492E7F4FD9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 34BD21041069BA3A23B7E85A;
+			remoteInfo = OutdoorDay;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0C0C20005A9AB0489FB7EB72 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0FB59E499508FCBDE5114FDE /* AdBannerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdBannerView.swift; sourceTree = "<group>"; };
+		1CDDD71E7E9A941753A15A3B /* AdsService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdsService.swift; sourceTree = "<group>"; };
+		2206227912A642E02BCCF578 /* OutdoorDayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OutdoorDayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		291D15791143BCD0B38E42F9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38D29D842A1A7374CE983D25 /* VerdictEngineTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VerdictEngineTests.swift; sourceTree = "<group>"; };
+		3AD7D44F2A66B3CC851C7F48 /* OutdoorDay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OutdoorDay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5178274D29722A47FBEA8D9B /* DayConditions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DayConditions.swift; sourceTree = "<group>"; };
+		7AA79751881B0574C77A41EE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		A3A6D3C64542262718691D09 /* OpenMeteoClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OpenMeteoClient.swift; sourceTree = "<group>"; };
+		ABC40AB9050D10DED64A93A2 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AF30B62DEE75B6DA1635BCE4 /* PurchaseManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		BF292A2BD077464E8B04F0C7 /* OutdoorDayApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OutdoorDayApp.swift; sourceTree = "<group>"; };
+		CA5CCF46A08DC75EE1F9BCAB /* AdConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdConfig.swift; sourceTree = "<group>"; };
+		F3A6EB2DDBC0D60A2E8479AA /* DayPlannerModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DayPlannerModel.swift; sourceTree = "<group>"; };
+		F3E5AE1E92624B0BE0C214CA /* LocationManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		82DBA37A9E2EE69ACC8E9C4A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A19A07EBF854A8EA28795DE /* Foundation.framework in Frameworks */,
+				431B8EA8EBFD3719B135692D /* GoogleMobileAds in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7099263A1BA47E6BECCAAB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6307BE37C12649C656F96891 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06AC44DB816EEF427C5837EA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3AD7D44F2A66B3CC851C7F48 /* OutdoorDay.app */,
+				2206227912A642E02BCCF578 /* OutdoorDayTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		13E3464B7764E2F55DB548C8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				83282A0AB5D6D56906496082 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		32520E3E327557C15A756487 /* OutdoorDayTests */ = {
+			isa = PBXGroup;
+			children = (
+				38D29D842A1A7374CE983D25 /* VerdictEngineTests.swift */,
+			);
+			name = OutdoorDayTests;
+			path = OutdoorDayTests;
+			sourceTree = "<group>";
+		};
+		46C0F4AE016202E69A99D376 /* OutdoorDay */ = {
+			isa = PBXGroup;
+			children = (
+				DB76B9DF39380CA6535D1AA0 /* Services */,
+				B4DB84DB6292505F7FC97F4E /* Models */,
+				6FB3ADE13F3C507B03818C8A /* Monetization */,
+				BF292A2BD077464E8B04F0C7 /* OutdoorDayApp.swift */,
+				0C0C20005A9AB0489FB7EB72 /* ContentView.swift */,
+				ABC40AB9050D10DED64A93A2 /* Assets.xcassets */,
+				291D15791143BCD0B38E42F9 /* Info.plist */,
+			);
+			name = OutdoorDay;
+			path = OutdoorDay;
+			sourceTree = "<group>";
+		};
+		6FB3ADE13F3C507B03818C8A /* Monetization */ = {
+			isa = PBXGroup;
+			children = (
+				AF30B62DEE75B6DA1635BCE4 /* PurchaseManager.swift */,
+				1CDDD71E7E9A941753A15A3B /* AdsService.swift */,
+				0FB59E499508FCBDE5114FDE /* AdBannerView.swift */,
+				CA5CCF46A08DC75EE1F9BCAB /* AdConfig.swift */,
+			);
+			name = Monetization;
+			path = Monetization;
+			sourceTree = "<group>";
+		};
+		8258A37F49D16FDE87248CE5 = {
+			isa = PBXGroup;
+			children = (
+				06AC44DB816EEF427C5837EA /* Products */,
+				13E3464B7764E2F55DB548C8 /* Frameworks */,
+				46C0F4AE016202E69A99D376 /* OutdoorDay */,
+				32520E3E327557C15A756487 /* OutdoorDayTests */,
+			);
+			sourceTree = "<group>";
+		};
+		83282A0AB5D6D56906496082 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				7AA79751881B0574C77A41EE /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		B4DB84DB6292505F7FC97F4E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5178274D29722A47FBEA8D9B /* DayConditions.swift */,
+			);
+			name = Models;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DB76B9DF39380CA6535D1AA0 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F3E5AE1E92624B0BE0C214CA /* LocationManager.swift */,
+				A3A6D3C64542262718691D09 /* OpenMeteoClient.swift */,
+				F3A6EB2DDBC0D60A2E8479AA /* DayPlannerModel.swift */,
+			);
+			name = Services;
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34BD21041069BA3A23B7E85A /* OutdoorDay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0DC71C6A09A0AD8288CC9B49 /* Build configuration list for PBXNativeTarget "OutdoorDay" */;
+			buildPhases = (
+				F54766628BB7603C652CE969 /* Sources */,
+				82DBA37A9E2EE69ACC8E9C4A /* Frameworks */,
+				5E752689C46F7929C9A58076 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OutdoorDay;
+			packageProductDependencies = (
+				B836BCF4301FB363717607E7 /* GoogleMobileAds */,
+			);
+			productName = OutdoorDay;
+			productReference = 3AD7D44F2A66B3CC851C7F48 /* OutdoorDay.app */;
+			productType = "com.apple.product-type.application";
+		};
+		377CB83257A71575179E7C93 /* OutdoorDayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 35AE606899FEDFE105AE8ECE /* Build configuration list for PBXNativeTarget "OutdoorDayTests" */;
+			buildPhases = (
+				8A1C81255F35BD2479CCA80B /* Sources */,
+				E7099263A1BA47E6BECCAAB1 /* Frameworks */,
+				D0D329CDBA46073F68857B51 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D25ADEB0D50D1C16CACFDAE7 /* PBXTargetDependency */,
+			);
+			name = OutdoorDayTests;
+			productName = OutdoorDayTests;
+			productReference = 2206227912A642E02BCCF578 /* OutdoorDayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C9A6A42315997A492E7F4FD9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 3DF373C8601F8A7558055EC2 /* Build configuration list for PBXProject "OutdoorDay" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8258A37F49D16FDE87248CE5;
+			minimizedProjectReferenceProxies = 0;
+			packageReferences = (
+				C1C689F80AD1D555F56DD815 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 06AC44DB816EEF427C5837EA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34BD21041069BA3A23B7E85A /* OutdoorDay */,
+				377CB83257A71575179E7C93 /* OutdoorDayTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5E752689C46F7929C9A58076 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FBE3837BD549A01AC618F0E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0D329CDBA46073F68857B51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8A1C81255F35BD2479CCA80B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC69E6704A2DADCD30C38CB9 /* VerdictEngineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F54766628BB7603C652CE969 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				300E6980ED582DA9C21B3385 /* OutdoorDayApp.swift in Sources */,
+				1D6F7A74230D73FD72B0EF28 /* ContentView.swift in Sources */,
+				671511935E7D1C66575B6035 /* DayConditions.swift in Sources */,
+				B12A8242E08604D8C5295197 /* LocationManager.swift in Sources */,
+				2B82FCC5536E4917888393E4 /* OpenMeteoClient.swift in Sources */,
+				4BD87F3DB393A354C151354B /* DayPlannerModel.swift in Sources */,
+				DE5383DFA42EB180867E756A /* PurchaseManager.swift in Sources */,
+				7F3ADC15B30FB93CB7CFA32C /* AdsService.swift in Sources */,
+				96DD8F3098A6AD239A6EB1CB /* AdBannerView.swift in Sources */,
+				B7CC0E716A5F22B2896F6492 /* AdConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D25ADEB0D50D1C16CACFDAE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OutdoorDay;
+			target = 34BD21041069BA3A23B7E85A /* OutdoorDay */;
+			targetProxy = 989D1862E39CCDF80EDAF765 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1C10B9AB291D3CFF14735773 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 56NQ7Z9L75;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "us.letshang.outdoor-day.tests";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OutdoorDay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OutdoorDay";
+			};
+			name = Debug;
+		};
+		4282B5FDC188DBC7ED60C4CE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56NQ7Z9L75;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OutdoorDay/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "us.letshang.outdoor-day";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		953E2348045430CA6AD8DF2D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C581D6EF05CB7CC84A8C8034 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56NQ7Z9L75;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OutdoorDay/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "us.letshang.outdoor-day";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C79276C00E9CAD92949C77EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 56NQ7Z9L75;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "us.letshang.outdoor-day.tests";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OutdoorDay.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OutdoorDay";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E0604EA3E32A10A41622356F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0DC71C6A09A0AD8288CC9B49 /* Build configuration list for PBXNativeTarget "OutdoorDay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C581D6EF05CB7CC84A8C8034 /* Release */,
+				4282B5FDC188DBC7ED60C4CE /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		35AE606899FEDFE105AE8ECE /* Build configuration list for PBXNativeTarget "OutdoorDayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C79276C00E9CAD92949C77EE /* Release */,
+				1C10B9AB291D3CFF14735773 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DF373C8601F8A7558055EC2 /* Build configuration list for PBXProject "OutdoorDay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				953E2348045430CA6AD8DF2D /* Debug */,
+				E0604EA3E32A10A41622356F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C1C689F80AD1D555F56DD815 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B836BCF4301FB363717607E7 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1C689F80AD1D555F56DD815 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C9A6A42315997A492E7F4FD9 /* Project object */;
+}

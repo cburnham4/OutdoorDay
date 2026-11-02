@@ -1,0 +1,13 @@
+Should you go outside today? Outdoor Day answers in one screen.
+
+We combine local UV index, pollen, and air quality into a simple verdict — Go outside, Go with care, or Better stay in — so allergy and sun-sensitive days are easier to plan.
+
+WHAT YOU GET
+• Instant outdoor verdict for your location
+• UV, pollen type/level, and US AQI at a glance
+• Ad-supported free verdict every day
+• Optional one-time Outdoor Day Plus unlock (remove ads + upcoming multi-day outlook)
+
+Built for quick checks before a walk, run, recess, or patio time. Not medical advice — if you have severe allergies or asthma, follow your clinician and local alerts.
+
+Data powered by Open-Meteo.
