@@ -21,6 +21,7 @@
 		B12A8242E08604D8C5295197 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E5AE1E92624B0BE0C214CA /* LocationManager.swift */; };
 		B7CC0E716A5F22B2896F6492 /* AdConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5CCF46A08DC75EE1F9BCAB /* AdConfig.swift */; };
 		CC69E6704A2DADCD30C38CB9 /* VerdictEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D29D842A1A7374CE983D25 /* VerdictEngineTests.swift */; };
+		D9DBCCE2DE8565C7D66EB809 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 123160DA88DAD0EBDBAD080E /* PrivacyInfo.xcprivacy */; };
 		DE5383DFA42EB180867E756A /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF30B62DEE75B6DA1635BCE4 /* PurchaseManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 /* Begin PBXFileReference section */
 		0C0C20005A9AB0489FB7EB72 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0FB59E499508FCBDE5114FDE /* AdBannerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdBannerView.swift; sourceTree = "<group>"; };
+		123160DA88DAD0EBDBAD080E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1CDDD71E7E9A941753A15A3B /* AdsService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AdsService.swift; sourceTree = "<group>"; };
 		2206227912A642E02BCCF578 /* OutdoorDayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OutdoorDayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		291D15791143BCD0B38E42F9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				0C0C20005A9AB0489FB7EB72 /* ContentView.swift */,
 				ABC40AB9050D10DED64A93A2 /* Assets.xcassets */,
 				291D15791143BCD0B38E42F9 /* Info.plist */,
+				123160DA88DAD0EBDBAD080E /* PrivacyInfo.xcprivacy */,
 			);
 			name = OutdoorDay;
 			path = OutdoorDay;
@@ -245,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FBE3837BD549A01AC618F0E /* Assets.xcassets in Resources */,
+				D9DBCCE2DE8565C7D66EB809 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
