@@ -38,3 +38,16 @@ For ad revenue, create an AdMob iOS app + banner under publisher `ca-app-pub-822
 - `GADBannerAdUnitID` = Banner unit ID (`…/…`)
 
 Rebuild/export IPA and upload a follow-up build.
+
+## Alternative: agent-assisted create (needs your 2FA code)
+
+If you can paste a 6-digit Apple 2FA code in chat, the agent can run:
+
+```bash
+cd "/Users/carlburnham/Documents/coding/Ios Projects/OutdoorDay"
+SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER="+1 (503) 929-7690" \
+SPACESHIP_2FA_CODE=123456 \
+bundle exec ruby scripts/asc_create_interactive.rb
+```
+
+Then wait-and-ship / `bash scripts/asc_ship_all.sh` continues automatically.
