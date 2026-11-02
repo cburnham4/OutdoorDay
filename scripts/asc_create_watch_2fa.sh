@@ -1,6 +1,6 @@
 #!/bin/bash
-# Trigger Apple login + wait for a 6-digit code in ~/Desktop/apple-2fa.txt
-# Then create Outdoor Day in ASC and run ship-all.
+# Wait for a 6-digit Apple 2FA code in ~/Desktop/apple-2fa.txt, then create
+# Outdoor Day in ASC and run ship-all.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export PATH="/usr/local/opt/ruby/bin:$PATH"
@@ -12,105 +12,70 @@ INTERVAL="${ASC_2FA_POLL_SECONDS:-5}"
 MAX_WAIT="${ASC_2FA_MAX_WAIT:-600}"
 
 PASS=$(security find-internet-password -s "deliver.${FASTLANE_USER}" -w 2>/dev/null || true)
-if [[ -z "$PASS" ]]; then
-  PASS=$(security find-generic-password -s "deliver.${FASTLANE_USER}" -w 2>/dev/null || true)
-fi
+[[ -z "$PASS" ]] && PASS=$(security find-generic-password -s "deliver.${FASTLANE_USER}" -w 2>/dev/null || true)
 if [[ -z "$PASS" ]]; then
   echo "No keychain password for deliver.${FASTLANE_USER}"
   exit 1
 fi
 export FASTLANE_PASSWORD="$PASS"
 
-cat >"$HOME/Desktop/apple-2fa.txt" <<EOF
-# Paste ONLY the 6-digit Apple verification code on the next line, then save.
-# (Delete these comment lines or leave them — the watcher picks the first 6-digit token.)
+cat >"$CODE_FILE" <<'EOF'
+# Paste ONLY the 6-digit Apple verification code below, then Save.
 
 EOF
-osascript -e 'display notification "Paste Apple 2FA into Desktop/apple-2fa.txt" with title "Outdoor Day ASC"' >/dev/null 2>&1 || true
+osascript -e 'display notification "Paste Apple 2FA into Desktop/apple-2fa.txt then Save" with title "Outdoor Day ASC"' >/dev/null 2>&1 || true
 open -a TextEdit "$CODE_FILE" >/dev/null 2>&1 || open "$CODE_FILE" >/dev/null 2>&1 || true
 
-echo "Waiting up to ${MAX_WAIT}s for 6-digit code in $CODE_FILE …"
-echo "(SMS should arrive after login starts — keep this terminal/agent running.)"
-started=$(date +%s)
-
-# Start login in background via expect-like ruby that blocks on stdin from a fifo
-FIFO=$(mktemp -u /tmp/od-2fa-fifo.XXXXXX)
-mkfifo "$FIFO"
-cleanup() { rm -f "$FIFO"; }
-trap cleanup EXIT
-
-(
-  # Feed ruby stdin from fifo
-  export SPACESHIP_SKIP_2FA_UPGRADE=1
-  bundle exec ruby -e '
+echo "Requesting Apple SMS 2FA to ${SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER}…"
+# Kick Spaceship just far enough to send SMS; ignore EOF on the code prompt.
+set +e
+bundle exec ruby -e '
 require "spaceship"
-user=ENV.fetch("FASTLANE_USER")
-pass=ENV.fetch("FASTLANE_PASSWORD")
-puts "LOGIN_START #{user}"
-Spaceship::ConnectAPI.login(user, pass)
-puts "LOGIN_OK"
-apps=Spaceship::ConnectAPI::App.all
-hit=apps.find{|a| a.bundle_id=="us.letshang.outdoor-day"}
-if hit
-  puts "ALREADY_EXISTS #{hit.id}"
-else
-  app=Spaceship::ConnectAPI::App.create(
-    name:"Outdoor Day", primary_locale:"en-US", version_string:"1.0",
-    sku:"outdoor-day-001", bundle_id_identifier:"us.letshang.outdoor-day",
-    platforms:["IOS"]
-  )
-  puts "CREATED #{app.id}"
+begin
+  Spaceship::ConnectAPI.login(ENV.fetch("FASTLANE_USER"), ENV.fetch("FASTLANE_PASSWORD"))
+  puts "UNEXPECTED_LOGIN_WITHOUT_2FA"
+rescue EOFError
+  puts "SMS_PROMPT_REACHED"
+rescue => e
+  puts "LOGIN_KICKOFF #{e.class}: #{e.message[0,200]}"
 end
-' <"$FIFO" >build/asc_create_watch.log 2>&1 &
-  echo $! >build/asc_create_watch.pid
-) &
+' >build/asc_create_sms_kick.log 2>&1
+set -e
+echo "---- sms kick ----"
+cat build/asc_create_sms_kick.log || true
 
-# Keep fifo open for writing
-exec 3>"$FIFO"
-
-# Give Spaceship a moment to request SMS / prompt
-sleep 8
-
+echo "Waiting up to ${MAX_WAIT}s for 6-digit code in $CODE_FILE …"
+started=$(date +%s)
 code=""
 while true; do
   now=$(date +%s)
   if (( now - started > MAX_WAIT )); then
     echo "Timed out waiting for 2FA code"
-    exec 3>&-
     exit 2
   fi
   if [[ -f "$CODE_FILE" ]]; then
-    # First 6 consecutive digits in the file
-    code=$(rg -oN --pcre2 '(?<![0-9])[0-9]{6}(?![0-9])' "$CODE_FILE" 2>/dev/null | head -1 || true)
-    if [[ -z "$code" ]]; then
-      code=$(grep -oE '[0-9]{6}' "$CODE_FILE" 2>/dev/null | head -1 || true)
-    fi
+    code=$(grep -oE '[0-9]{6}' "$CODE_FILE" 2>/dev/null | head -1 || true)
   fi
   if [[ -n "$code" ]]; then
-    echo "CODE_FOUND ****** (len=${#code})"
-    printf '%s\n' "$code" >&3
-    exec 3>&-
+    echo "CODE_FOUND (len=${#code})"
     break
   fi
   sleep "$INTERVAL"
 done
 
-# Wait for ruby create
-pid=$(cat build/asc_create_watch.pid 2>/dev/null || true)
-if [[ -n "$pid" ]]; then
-  for i in $(seq 1 60); do
-    if ! kill -0 "$pid" 2>/dev/null; then break; fi
-    sleep 2
-  done
-  wait "$pid" 2>/dev/null || true
-fi
+export SPACESHIP_2FA_CODE="$code"
+echo "Creating ASC app with provided 2FA code…"
+set +e
+bundle exec ruby scripts/asc_create_interactive.rb >build/asc_create_watch.log 2>&1
+create_status=$?
+set -e
 echo "---- create log ----"
-tail -40 build/asc_create_watch.log || true
+cat build/asc_create_watch.log || true
 
 if rg -q "CREATED|ALREADY_EXISTS" build/asc_create_watch.log 2>/dev/null; then
   echo "Running ship-all…"
   bash scripts/asc_ship_all.sh
   exit $?
 fi
-echo "Create did not succeed — see build/asc_create_watch.log"
+echo "Create failed (status=$create_status)"
 exit 1
