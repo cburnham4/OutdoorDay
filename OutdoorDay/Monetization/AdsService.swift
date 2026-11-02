@@ -22,20 +22,24 @@ final class AdsService {
         guard !didStartSDK else { return }
         didStartSDK = true
 
-        #if DEBUG
-        MobileAds.shared.requestConfiguration.testDeviceIdentifiers = ["Simulator"]
-        #endif
-
         // Ask for ATT before initializing the ads SDK (App Store requirement when tracking).
         Task { @MainActor in
+            // Brief yield so simulator `defaults write` / container prefs are visible
+            // before the first UserDefaults read (screenshot tooling uses skipATT).
+            try? await Task.sleep(nanoseconds: 150_000_000)
+            UserDefaults.standard.synchronize()
+            #if DEBUG
+            Self.writeScreenshotDebugLog()
+            #endif
             // Screenshot tooling: `defaults write us.letshang.outdoor-day skipATT -bool YES`
+            // Do not touch MobileAds / BannerView at all when skipping — any GMA access can present ATT.
             if Self.shouldSkipATT {
-                self.isReady = true
-                let actions = self.pendingActions
                 self.pendingActions = []
-                actions.forEach { $0() }
                 return
             }
+            #if DEBUG
+            MobileAds.shared.requestConfiguration.testDeviceIdentifiers = ["Simulator"]
+            #endif
             await self.requestTrackingIfNeeded()
             self.startMobileAds()
         }
@@ -46,6 +50,21 @@ final class AdsService {
             || ProcessInfo.processInfo.environment["SKIP_ATT"] == "1"
             || UserDefaults.standard.bool(forKey: "skipATT")
     }
+
+    #if DEBUG
+    private static func writeScreenshotDebugLog() {
+        let defaults = UserDefaults.standard
+        let line = [
+            "skipATT_bool=\(defaults.bool(forKey: "skipATT"))",
+            "skipATT_obj=\(String(describing: defaults.object(forKey: "skipATT")))",
+            "forcePremium=\(defaults.bool(forKey: "forcePremium"))",
+            "args=\(ProcessInfo.processInfo.arguments)",
+            "bundle=\(Bundle.main.bundleIdentifier ?? "nil")"
+        ].joined(separator: " ")
+        guard let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        try? (line + "\n").write(to: docs.appendingPathComponent("screenshot-debug.txt"), atomically: true, encoding: .utf8)
+    }
+    #endif
 
     private func requestTrackingIfNeeded() async {
         guard #available(iOS 14, *) else { return }

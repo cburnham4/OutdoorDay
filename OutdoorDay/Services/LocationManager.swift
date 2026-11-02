@@ -24,6 +24,11 @@ final class LocationManager: NSObject, ObservableObject {
 
     func request() {
         statusMessage = nil
+        // Screenshot tooling: skip the system location dialog and seed NYC.
+        if Self.shouldSkipLocationPrompt {
+            applyScreenshotLocation()
+            return
+        }
         switch manager.authorizationStatus {
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
@@ -35,6 +40,20 @@ final class LocationManager: NSObject, ObservableObject {
         @unknown default:
             statusMessage = "Unable to read location permission."
         }
+    }
+
+    private static var shouldSkipLocationPrompt: Bool {
+        UserDefaults.standard.bool(forKey: "skipATT")
+            || ProcessInfo.processInfo.arguments.contains("-skipATT")
+            || ProcessInfo.processInfo.environment["SKIP_ATT"] == "1"
+    }
+
+    private func applyScreenshotLocation() {
+        authorizationDenied = false
+        let nyc = CLLocationCoordinate2D(latitude: 40.7128, longitude: -74.0060)
+        coordinate = nyc
+        placeName = "New York, NY"
+        statusMessage = nil
     }
 }
 

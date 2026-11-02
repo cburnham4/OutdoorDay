@@ -10,6 +10,12 @@ struct ContentView: View {
     @EnvironmentObject private var purchases: PurchaseManager
     @State private var showPaywall = false
 
+    private static var skipAdsForScreenshots: Bool {
+        UserDefaults.standard.bool(forKey: "skipATT")
+            || ProcessInfo.processInfo.arguments.contains("-skipATT")
+            || ProcessInfo.processInfo.environment["SKIP_ATT"] == "1"
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -42,7 +48,7 @@ struct ContentView: View {
                 .refreshable { await model.refresh() }
             }
             .safeAreaInset(edge: .bottom) {
-                if !purchases.isPremium {
+                if !purchases.isPremium && !Self.skipAdsForScreenshots {
                     AdBannerView()
                         .frame(height: 50)
                         .background(.ultraThinMaterial)

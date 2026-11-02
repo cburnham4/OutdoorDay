@@ -22,8 +22,8 @@ while true; do
     sleep "$INTERVAL"
     continue
   fi
-  if echo "$out" | grep -qiE "OpenTimeout|ReadTimeout|ECONNRESET|timed out|execution expired"; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S %Z') network timeout — retry in ${INTERVAL}s"
+  if echo "$out" | grep -qiE "OpenTimeout|ReadTimeout|ECONNRESET|timed out|execution expired|UNEXPECTED_ERROR|status.?500|ASC apps lookup failed"; then
+    echo "$(date '+%Y-%m-%d %H:%M:%S %Z') transient ASC/network error — retry in ${INTERVAL}s"
     sleep "$INTERVAL"
     continue
   fi
