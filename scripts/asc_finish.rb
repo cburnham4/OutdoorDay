@@ -16,10 +16,11 @@ BUNDLE_ID = "us.letshang.outdoor-day"
 PRODUCT_ID = "us.letshang.outdoor_day.remove_ads"
 KEY_ID = ENV.fetch("ASC_KEY_ID", "CPZ7YXKKGD")
 ISSUER = ENV.fetch("ASC_ISSUER", "69a6de87-65f4-47e3-e053-5b8c7c11a4d1")
-KEY_PATH = ENV.fetch(
-  "ASC_KEY_PATH",
-  "/Users/carlburnham/Documents/coding/Ios Projects/LetsHangIOS/SunriseSunsetIos/AuthKey_CPZ7YXKKGD.p8"
-)
+KEY_PATH = ENV["ASC_KEY_PATH"] || [
+  "/Users/carlburnham/Documents/coding/Ios Projects/LetsHangIOS/SunriseSunsetIos/AuthKey_CPZ7YXKKGD.p8",
+  "/Users/carlburnham/Documents/coding/TruthFinder/fastlane/AuthKey_CPZ7YXKKGD.p8"
+].find { |p| File.exist?(p) } || abort("ASC AuthKey .p8 not found; set ASC_KEY_PATH")
+TARGET_USD_PRICE = ENV.fetch("IAP_USD_PRICE", "2.99")
 
 SCREENSHOT_MAP = {
   "APP_IPHONE_65" => /iPhone 6\.5".*\.png\z/,
@@ -168,6 +169,49 @@ if iap
     })
     puts "IAP_LOC #{code}"
   end
+
+  # Price schedule — required for paid unlock revenue path ($2.99 default).
+  code, points = request(:get, "/v2/inAppPurchases/#{iap_id}/pricePoints?filter[territory]=USA&limit=200")
+  price_point = (points["data"] || []).find { |p| p.dig("attributes", "customerPrice").to_s == TARGET_USD_PRICE }
+  price_point ||= (points["data"] || []).min_by { |p| (p.dig("attributes", "customerPrice").to_f - TARGET_USD_PRICE.to_f).abs }
+  if price_point
+    temp_price_id = "${price1}"
+    code, priced = request(:post, "/v1/inAppPurchasePriceSchedules", body: {
+      data: {
+        type: "inAppPurchasePriceSchedules",
+        relationships: {
+          inAppPurchase: { data: { type: "inAppPurchases", id: iap_id } },
+          baseTerritory: { data: { type: "territories", id: "USA" } },
+          manualPrices: { data: [{ type: "inAppPurchasePrices", id: temp_price_id }] }
+        }
+      },
+      included: [
+        {
+          type: "inAppPurchasePrices",
+          id: temp_price_id,
+          attributes: { startDate: nil },
+          relationships: {
+            inAppPurchaseV2: { data: { type: "inAppPurchases", id: iap_id } },
+            inAppPurchasePricePoint: { data: { type: "inAppPurchasePricePoints", id: price_point["id"] } }
+          }
+        }
+      ]
+    })
+    puts "IAP_PRICE #{code} usd=#{price_point.dig('attributes', 'customerPrice')} point=#{price_point['id']}"
+    puts priced.to_json[0, 400] unless (200..299).cover?(code)
+  else
+    puts "IAP_PRICE skip: no USA price points (#{code})"
+  end
+
+  # Submit IAP for review when possible
+  code, submitted_iap = request(:post, "/v1/inAppPurchaseSubmissions", body: {
+    data: {
+      type: "inAppPurchaseSubmissions",
+      relationships: { inAppPurchaseV2: { data: { type: "inAppPurchases", id: iap_id } } }
+    }
+  })
+  puts "IAP_SUBMIT #{code}"
+  puts submitted_iap.to_json[0, 300] unless (200..299).cover?(code)
 end
 
 shot_dir = ROOT.join("fastlane/screenshots/en-US")

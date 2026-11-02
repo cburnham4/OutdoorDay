@@ -16,10 +16,10 @@ BUNDLE_ID = "us.letshang.outdoor-day"
 IPA = ROOT.join("build/OutdoorDay.ipa")
 KEY_ID = ENV.fetch("ASC_KEY_ID", "CPZ7YXKKGD")
 ISSUER = ENV.fetch("ASC_ISSUER", "69a6de87-65f4-47e3-e053-5b8c7c11a4d1")
-KEY_PATH = ENV.fetch(
-  "ASC_KEY_PATH",
-  "/Users/carlburnham/Documents/coding/Ios Projects/LetsHangIOS/SunriseSunsetIos/AuthKey_CPZ7YXKKGD.p8"
-)
+KEY_PATH = ENV["ASC_KEY_PATH"] || [
+  "/Users/carlburnham/Documents/coding/Ios Projects/LetsHangIOS/SunriseSunsetIos/AuthKey_CPZ7YXKKGD.p8",
+  "/Users/carlburnham/Documents/coding/TruthFinder/fastlane/AuthKey_CPZ7YXKKGD.p8"
+].find { |p| File.exist?(p) } || abort("ASC AuthKey .p8 not found; set ASC_KEY_PATH")
 
 def b64url(data)
   Base64.urlsafe_encode64(data).delete("=")
@@ -70,6 +70,10 @@ def read_meta(name)
   ROOT.join("fastlane/metadata/en-US/#{name}.txt").read.strip
 end
 
+def read_root_meta(name)
+  ROOT.join("fastlane/metadata/#{name}.txt").read.strip
+end
+
 puts "== Outdoor Day ASC ship =="
 abort("Missing IPA at #{IPA}") unless IPA.file?
 
@@ -107,7 +111,7 @@ loc = (locs["data"] || []).find { |l| l.dig("attributes", "locale") == "en-US" }
 attrs = {
   description: read_meta("description"),
   keywords: read_meta("keywords"),
-  marketingUrl: "https://cburnham4.github.io/OutdoorDay/",
+  marketingUrl: read_meta("marketing_url"),
   promotionalText: read_meta("promotional_text"),
   supportUrl: read_meta("support_url"),
   whatsNew: read_meta("release_notes")
@@ -132,10 +136,36 @@ else
   loc_id = created.dig("data", "id")
 end
 
-# App info subtitle / name (primary listing)
+# App info subtitle / name / categories / copyright
 code, infos = request(:get, "/v1/apps/#{app_id}/appInfos")
 info = infos["data"]&.first
 if info
+  primary = read_root_meta("primary_category")
+  secondary = read_root_meta("secondary_category")
+  copyright = read_root_meta("copyright")
+  code, patched_info = request(:patch, "/v1/appInfos/#{info['id']}", body: {
+    data: {
+      type: "appInfos",
+      id: info["id"],
+      attributes: {},
+      relationships: {
+        primaryCategory: { data: { type: "appCategories", id: primary } },
+        secondaryCategory: { data: { type: "appCategories", id: secondary } }
+      }
+    }
+  })
+  puts "APP_INFO_CATS #{code} primary=#{primary} secondary=#{secondary}"
+  puts patched_info.to_json[0, 300] unless (200..299).cover?(code)
+
+  request(:patch, "/v1/apps/#{app_id}", body: {
+    data: { type: "apps", id: app_id, attributes: { contentRightsDeclaration: "DOES_NOT_USE_THIRD_PARTY_CONTENT" } }
+  })
+  # Copyright lives on the version
+  request(:patch, "/v1/appStoreVersions/#{version_id}", body: {
+    data: { type: "appStoreVersions", id: version_id, attributes: { copyright: copyright } }
+  })
+  puts "COPYRIGHT #{copyright}"
+
   code, info_locs = request(:get, "/v1/appInfos/#{info['id']}/appInfoLocalizations")
   info_loc = (info_locs["data"] || []).find { |l| l.dig("attributes", "locale") == "en-US" }
   if info_loc
