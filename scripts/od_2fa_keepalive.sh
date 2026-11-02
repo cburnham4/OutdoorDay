@@ -38,5 +38,9 @@ while true; do
     echo "$(date) restarting clipboard watch" >>"$LOG"
     bash scripts/od_2fa_clipboard_watch.sh >> build/od_2fa_clipboard.log 2>&1 &
   fi
+  if ! pgrep -f 'scripts/od_followup_2fa.sh' >/dev/null; then
+    echo "$(date) restarting followup 2fa watch" >>"$LOG"
+    bash scripts/od_followup_2fa.sh >> build/od_followup_2fa.log 2>&1 &
+  fi
   sleep 60
 done
