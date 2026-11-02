@@ -28,6 +28,8 @@ while true; do
     echo "$(date '+%Y-%m-%d %H:%M:%S %Z') still NO_APP — sleeping ${INTERVAL}s"
     if (( misses == 1 || misses % NOTIFY_EVERY == 0 )); then
       notify "Outdoor Day blocked" "Create ASC app us.letshang.outdoor-day (SKU outdoor-day-001)."
+      # Surface the create checklist without requiring a chat reply.
+      bash scripts/open_asc_create.sh >/dev/null 2>&1 || true
     fi
     sleep "$INTERVAL"
     continue
