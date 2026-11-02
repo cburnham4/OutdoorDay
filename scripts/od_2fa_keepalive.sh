@@ -14,7 +14,7 @@ while true; do
     echo "$(date) restarting watcher NO_RESEND=1" >>"$LOG"
     env \
       SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER='+1 (503) 929-7690' \
-      ASC_2FA_MAX_WAIT=1800 \
+      ASC_2FA_MAX_WAIT=3600 \
       ASC_2FA_POLL_SECONDS=2 \
       ASC_2FA_NO_RESEND=1 \
       FASTLANE_USER=cburnhamiv@gmail.com \
@@ -24,6 +24,10 @@ while true; do
   if ! pgrep -f asc_wait_and_ship.sh >/dev/null; then
     echo "$(date) restarting wait_and_ship" >>"$LOG"
     bash scripts/asc_wait_and_ship.sh >> build/wait_and_ship.log 2>&1 &
+  fi
+  if ! pgrep -f od_2fa_desktop_bridge.sh >/dev/null; then
+    echo "$(date) restarting desktop bridge" >>"$LOG"
+    bash scripts/od_2fa_desktop_bridge.sh >> build/od_2fa_bridge.log 2>&1 &
   fi
   sleep 60
 done
