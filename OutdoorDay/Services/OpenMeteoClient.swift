@@ -17,12 +17,18 @@ struct OpenMeteoClient {
     func fetchConditions(latitude: Double, longitude: Double) async throws -> DayConditions {
         async let aqTask = fetchAirQuality(latitude: latitude, longitude: longitude)
         async let uvTask = fetchDayUV(latitude: latitude, longitude: longitude)
+        async let socialTask = fetchSocialPollen(latitude: latitude, longitude: longitude)
         let aq = try await aqTask
         let dayUV = try? await uvTask
+        let social = await socialTask
 
         // Prefer today's max UV so nighttime launches still reflect the day.
         let uv = dayUV ?? aq.current.uv_index
-        let pollen = aq.bestPollen
+        var pollen = aq.bestPollen
+        // Open-Meteo species pollen is mostly Europe/CAMS; fall back for US/elsewhere.
+        if pollen.value == nil, let social {
+            pollen = social
+        }
         return DayConditions(
             uvIndex: uv,
             usAqi: aq.current.us_aqi,
@@ -67,6 +73,28 @@ struct OpenMeteoClient {
             return max
         }
         return decoded.current.uv_index
+    }
+
+    /// Soft-fail pollen fallback (same host pattern as Pollen Air Quality / PollenLevels).
+    /// Maps categorical levels onto approximate grains/m³ for VerdictEngine.
+    private func fetchSocialPollen(latitude: Double, longitude: Double) async -> (label: String, value: Double?)? {
+        let latLong = String(format: "[%f,%f]", latitude, longitude)
+        guard let encoded = latLong.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "https://socialpollencount.co.uk/api/forecast?location=\(encoded)")
+        else { return nil }
+
+        var request = URLRequest(url: url)
+        request.timeoutInterval = 8
+        do {
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                return nil
+            }
+            let decoded = try JSONDecoder().decode(SocialPollenResponse.self, from: data)
+            return decoded.todaysMapped
+        } catch {
+            return nil
+        }
     }
 
     private static func validate(_ response: URLResponse) throws {
@@ -121,4 +149,41 @@ private struct CurrentForecast: Decodable {
 
 private struct DailyForecast: Decodable {
     let uv_index_max: [Double]?
+}
+
+private struct SocialPollenResponse: Decodable {
+    let forecast: [SocialPollenDay]
+
+    var todaysMapped: (label: String, value: Double?)? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        let day = forecast.first { entry in
+            guard let date = formatter.date(from: entry.date) else { return false }
+            return Calendar.current.isDateInToday(date)
+        } ?? forecast.first
+        guard let day else { return nil }
+        return day.mapped
+    }
+}
+
+private struct SocialPollenDay: Decodable {
+    let pollen_count: String
+    let date: String
+
+    /// Approximate grains/m³ so existing VerdictEngine thresholds still apply.
+    var mapped: (label: String, value: Double?) {
+        switch pollen_count.lowercased() {
+        case "low":
+            return ("Pollen", 5)
+        case "moderate":
+            return ("Pollen", 30)
+        case "high":
+            return ("Pollen", 75)
+        case "very high", "veryhigh":
+            return ("Pollen", 150)
+        default:
+            return ("Pollen", nil)
+        }
+    }
 }

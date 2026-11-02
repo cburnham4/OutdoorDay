@@ -20,3 +20,5 @@ fastlane/AuthKey_*.p8
 fastlane/.env
 
 .DS_Store
+vendor/
+.bundle/
