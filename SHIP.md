@@ -6,10 +6,12 @@
 - US pollen soft-fallback via Social Pollen Count when Open-Meteo species pollen is empty
 - Ads (AdMob test units) + StoreKit 2 `us.letshang.outdoor_day.remove_ads`
 - ATT before `MobileAds.start`; PrivacyInfo tracking + Device ID; `ITSAppUsesNonExemptEncryption=false`
-- App icon, privacy manifest, listing copy, GitHub Pages privacy/support
+- AdMob SKAdNetwork list (50 IDs); categories Weather + Health; copyright + marketing URL metadata
+- Ship scripts set IAP `$2.99` price schedule + submit IAP on finish
+- App icon, privacy manifest, listing copy, GitHub Pages privacy/support (live)
 - Bundle ID + App Store provisioning profile (`Outdoor Day App Store 202611012142`)
 - Screenshots in `fastlane/screenshots/en-US/` (6.5 / 6.7 / 6.9)
-- Signed IPA: `build/OutdoorDay.ipa` (ATT rebuild 2026-11-02)
+- Signed IPA: `build/OutdoorDay.ipa` (ATT + SKAd rebuild 2026-11-02 12:20 EST)
 - Ship helpers:
   - `bash scripts/asc_ship_all.sh` — ship + finish in one shot
   - `ruby scripts/asc_ship.rb` — IPA + listing metadata
