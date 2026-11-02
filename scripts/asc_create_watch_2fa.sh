@@ -25,22 +25,31 @@ export FASTLANE_PASSWORD="$PASS"
 # after several attempts. Paste the last code already received.
 export ASC_2FA_NO_RESEND="${ASC_2FA_NO_RESEND:-1}"
 
-if [[ "$ASC_2FA_NO_RESEND" == "1" ]]; then
-  cat >"$CODE_FILE" <<'EOF'
-# Paste the LAST 6-digit Apple SMS code you already received, then Save.
-# New codes are rate-limited — do not wait for a fresh text.
+# Do not clobber an existing 6-digit code the user already pasted.
+existing_code=""
+if [[ -f "$CODE_FILE" ]]; then
+  existing_code=$(grep -oE '[0-9]{6}' "$CODE_FILE" 2>/dev/null | head -1 || true)
+fi
+if [[ -z "$existing_code" ]]; then
+  if [[ "$ASC_2FA_NO_RESEND" == "1" ]]; then
+    cat >"$CODE_FILE" <<'EOF'
+# Paste/copy Apple 6-digit code (device or SMS), then Save.
+# Clipboard is also watched.
 
 EOF
-  osascript -e 'display notification "Paste the LAST Apple SMS code into Desktop/apple-2fa.txt" with title "Outdoor Day ASC — no new SMS"' >/dev/null 2>&1 || true
-else
-  cat >"$CODE_FILE" <<'EOF'
+    osascript -e 'display notification "Paste or copy Apple 2FA code — Desktop/apple-2fa.txt" with title "Outdoor Day ASC"' >/dev/null 2>&1 || true
+  else
+    cat >"$CODE_FILE" <<'EOF'
 # Paste the 6-digit Apple SMS code below, then Save.
 # Use the code from the text that arrives AFTER this watcher starts.
 
 EOF
-  osascript -e 'display notification "Apple will text a code — paste it into Desktop/apple-2fa.txt" with title "Outdoor Day ASC"' >/dev/null 2>&1 || true
+    osascript -e 'display notification "Apple will text a code — paste it into Desktop/apple-2fa.txt" with title "Outdoor Day ASC"' >/dev/null 2>&1 || true
+  fi
+  open -a TextEdit "$CODE_FILE" >/dev/null 2>&1 || open "$CODE_FILE" >/dev/null 2>&1 || true
+else
+  echo "Reusing existing code already in $CODE_FILE"
 fi
-open -a TextEdit "$CODE_FILE" >/dev/null 2>&1 || open "$CODE_FILE" >/dev/null 2>&1 || true
 
 FIFO=$(mktemp -u /tmp/od-2fa.XXXXXX)
 mkfifo "$FIFO"
