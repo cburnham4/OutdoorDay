@@ -288,6 +288,39 @@ SCREENSHOT_MAP.each do |display_type, pattern|
   end
 end
 
+# App Review contact + notes
+def read_review(name)
+  ROOT.join("fastlane/metadata/en-US/review_information/#{name}.txt").read.strip
+rescue StandardError
+  ""
+end
+
+_code, review = request(:get, "/v1/appStoreVersions/#{version_id}/appStoreReviewDetail")
+review_detail = review["data"]
+review_attrs = {
+  contactFirstName: read_review("first_name"),
+  contactLastName: read_review("last_name"),
+  contactEmail: read_review("email_address"),
+  contactPhone: read_review("phone_number"),
+  notes: read_review("notes")
+}.reject { |_, v| v.nil? || v.empty? }
+if review_detail
+  code, _ = request(:patch, "/v1/appStoreReviewDetails/#{review_detail['id']}", body: {
+    data: { type: "appStoreReviewDetails", id: review_detail["id"], attributes: review_attrs }
+  })
+  puts "REVIEW_DETAIL_PATCH #{code}"
+elsif !review_attrs.empty?
+  code, created_review = request(:post, "/v1/appStoreReviewDetails", body: {
+    data: {
+      type: "appStoreReviewDetails",
+      attributes: review_attrs,
+      relationships: { appStoreVersion: { data: { type: "appStoreVersions", id: version_id } } }
+    }
+  })
+  puts "REVIEW_DETAIL_CREATE #{code}"
+  puts created_review.to_json[0, 300] unless (200..299).cover?(code)
+end
+
 _code, builds = request(:get, "/v1/builds?filter[app]=#{app_id}&sort=-uploadedDate&limit=5")
 build = (builds["data"] || []).find { |b| b.dig("attributes", "processingState") == "VALID" }
 if build

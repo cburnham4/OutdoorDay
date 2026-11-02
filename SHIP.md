@@ -21,8 +21,11 @@
 
 ## One blocker (cannot automate)
 
-Apple’s App Store Connect API **forbids creating apps** (`apps` CREATE → 403).
+Apple’s App Store Connect API **forbids creating apps** (`apps` CREATE → 403). Spaceship/browser sessions are expired.
+
+Exact steps: `scripts/human_asc_create.md`
 
 1. Open https://appstoreconnect.apple.com/apps → **+** → New App
 2. iOS · Name **Outdoor Day** · Bundle ID **us.letshang.outdoor-day** · SKU `outdoor-day-001`
-3. Reply here (or wait — we poll) and we run `asc_ship.rb` then `asc_finish.rb`.
+3. Reply here (or wait — we poll) and we run `bash scripts/asc_ship_all.sh`
+4. Set **App Privacy** nutrition label in ASC UI (not available via API) using `fastlane/app_privacy.json`
