@@ -6,7 +6,12 @@ cd "$(dirname "$0")/.."
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 export FASTLANE_USER="${FASTLANE_USER:-cburnhamiv@gmail.com}"
-export SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER="${SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER:-+1 (503) 929-7690}"
+# Must stay quoted — unquoted "+1 (503) ..." truncates to "+1" and blocks SMS.
+DEFAULT_2FA_PHONE='+1 (503) 929-7690'
+if [[ -z "${SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER:-}" || "${SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER}" == "+1" ]]; then
+  export SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER="$DEFAULT_2FA_PHONE"
+fi
+echo "2FA_PHONE=${SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER}"
 CODE_FILE="${ASC_2FA_FILE:-$HOME/Desktop/apple-2fa.txt}"
 INTERVAL="${ASC_2FA_POLL_SECONDS:-3}"
 MAX_WAIT="${ASC_2FA_MAX_WAIT:-600}"
@@ -16,12 +21,25 @@ PASS=$(security find-internet-password -s "deliver.${FASTLANE_USER}" -w 2>/dev/n
 [[ -n "$PASS" ]] || { echo "No keychain password for deliver.${FASTLANE_USER}"; exit 1; }
 export FASTLANE_PASSWORD="$PASS"
 
-cat >"$CODE_FILE" <<'EOF'
+# ASC_2FA_NO_RESEND=1 (default): do not request a new SMS — Apple rate-limits
+# after several attempts. Paste the last code already received.
+export ASC_2FA_NO_RESEND="${ASC_2FA_NO_RESEND:-1}"
+
+if [[ "$ASC_2FA_NO_RESEND" == "1" ]]; then
+  cat >"$CODE_FILE" <<'EOF'
+# Paste the LAST 6-digit Apple SMS code you already received, then Save.
+# New codes are rate-limited — do not wait for a fresh text.
+
+EOF
+  osascript -e 'display notification "Paste the LAST Apple SMS code into Desktop/apple-2fa.txt" with title "Outdoor Day ASC — no new SMS"' >/dev/null 2>&1 || true
+else
+  cat >"$CODE_FILE" <<'EOF'
 # Paste the 6-digit Apple SMS code below, then Save.
 # Use the code from the text that arrives AFTER this watcher starts.
 
 EOF
-osascript -e 'display notification "Apple will text a code — paste it into Desktop/apple-2fa.txt" with title "Outdoor Day ASC"' >/dev/null 2>&1 || true
+  osascript -e 'display notification "Apple will text a code — paste it into Desktop/apple-2fa.txt" with title "Outdoor Day ASC"' >/dev/null 2>&1 || true
+fi
 open -a TextEdit "$CODE_FILE" >/dev/null 2>&1 || open "$CODE_FILE" >/dev/null 2>&1 || true
 
 FIFO=$(mktemp -u /tmp/od-2fa.XXXXXX)
@@ -36,6 +54,17 @@ exec 3<>"$FIFO"
 
 bundle exec ruby -e '
 require "spaceship"
+# When rate-limited, skip the SMS PUT and accept the last code via stdin.
+if ENV["ASC_2FA_NO_RESEND"] == "1"
+  Spaceship::Client.class_eval do
+    alias_method :__od_request_2fa_phone, :request_two_factor_code_from_phone
+    def request_two_factor_code_from_phone(phone_id, phone_number, code_length, push_mode = "sms", should_request_code = true)
+      puts "NO_RESEND — enter last code for #{phone_number}"
+      $stdout.flush
+      __od_request_2fa_phone(phone_id, phone_number, code_length, push_mode, false)
+    end
+  end
+end
 user = ENV.fetch("FASTLANE_USER")
 pass = ENV.fetch("FASTLANE_PASSWORD")
 puts "LOGIN_START #{user}"
@@ -62,10 +91,10 @@ end
 RUBY_PID=$!
 echo "RUBY_PID=$RUBY_PID"
 
-echo "Waiting for Spaceship to request SMS…"
-for i in $(seq 1 60); do
-  if rg -q "Successfully requested text message|Please enter the 6 digit code" "$LOG" 2>/dev/null; then
-    echo "SMS_REQUESTED"
+echo "Waiting for Spaceship 2FA prompt…"
+for i in $(seq 1 90); do
+  if rg -q "Successfully requested text message|Please enter the .*digit code|NO_RESEND" "$LOG" 2>/dev/null; then
+    echo "2FA_PROMPT_READY"
     break
   fi
   if ! kill -0 "$RUBY_PID" 2>/dev/null; then
