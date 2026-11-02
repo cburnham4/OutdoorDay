@@ -28,13 +28,28 @@ final class AdsService {
 
         // Ask for ATT before initializing the ads SDK (App Store requirement when tracking).
         Task { @MainActor in
+            // Screenshot tooling: `defaults write us.letshang.outdoor-day skipATT -bool YES`
+            if Self.shouldSkipATT {
+                self.isReady = true
+                let actions = self.pendingActions
+                self.pendingActions = []
+                actions.forEach { $0() }
+                return
+            }
             await self.requestTrackingIfNeeded()
             self.startMobileAds()
         }
     }
 
+    private static var shouldSkipATT: Bool {
+        ProcessInfo.processInfo.arguments.contains("-skipATT")
+            || ProcessInfo.processInfo.environment["SKIP_ATT"] == "1"
+            || UserDefaults.standard.bool(forKey: "skipATT")
+    }
+
     private func requestTrackingIfNeeded() async {
         guard #available(iOS 14, *) else { return }
+        if Self.shouldSkipATT { return }
         // Slight delay so the permission dialog isn't under the launch screen.
         try? await Task.sleep(nanoseconds: 500_000_000)
         guard ATTrackingManager.trackingAuthorizationStatus == .notDetermined else { return }

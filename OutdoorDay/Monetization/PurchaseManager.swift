@@ -26,6 +26,11 @@ final class PurchaseManager: ObservableObject {
         Task {
             await refreshEntitlements()
             await loadProduct()
+            if ProcessInfo.processInfo.arguments.contains("-forcePremium")
+                || ProcessInfo.processInfo.environment["FORCE_PREMIUM"] == "1"
+                || UserDefaults.standard.bool(forKey: "forcePremium") {
+                isPremium = true
+            }
         }
     }
 

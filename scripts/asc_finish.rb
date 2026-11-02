@@ -48,30 +48,39 @@ end
 
 $token = mint_token
 
-def request(method, path, body: nil)
+def request(method, path, body: nil, attempts: 3)
   uri = URI("https://api.appstoreconnect.apple.com#{path}")
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  http.open_timeout = 30
-  http.read_timeout = 180
-  req = case method
-        when :get then Net::HTTP::Get.new(uri)
-        when :post then Net::HTTP::Post.new(uri)
-        when :patch then Net::HTTP::Patch.new(uri)
-        else raise "bad method"
-        end
-  req["Authorization"] = "Bearer #{$token}"
-  if body
-    req["Content-Type"] = "application/json"
-    req.body = JSON.generate(body)
+  last_error = nil
+  attempts.times do |i|
+    begin
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.open_timeout = 60
+      http.read_timeout = 180
+      req = case method
+            when :get then Net::HTTP::Get.new(uri)
+            when :post then Net::HTTP::Post.new(uri)
+            when :patch then Net::HTTP::Patch.new(uri)
+            else raise "bad method"
+            end
+      req["Authorization"] = "Bearer #{$token}"
+      if body
+        req["Content-Type"] = "application/json"
+        req.body = JSON.generate(body)
+      end
+      res = http.request(req)
+      parsed = begin
+        JSON.parse(res.body.to_s.force_encoding("UTF-8"))
+      rescue StandardError
+        { "raw" => res.body.to_s }
+      end
+      return [res.code.to_i, parsed]
+    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, Errno::ETIMEDOUT => e
+      last_error = e
+      sleep(2 ** i)
+    end
   end
-  res = http.request(req)
-  parsed = begin
-    JSON.parse(res.body.to_s.force_encoding("UTF-8"))
-  rescue StandardError
-    { "raw" => res.body.to_s }
-  end
-  [res.code.to_i, parsed]
+  raise last_error
 end
 
 puts "== Outdoor Day ASC finish =="

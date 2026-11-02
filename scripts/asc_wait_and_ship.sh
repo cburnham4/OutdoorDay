@@ -22,6 +22,11 @@ while true; do
     sleep "$INTERVAL"
     continue
   fi
+  if echo "$out" | grep -qiE "OpenTimeout|ReadTimeout|ECONNRESET|timed out|execution expired"; then
+    echo "$(date '+%Y-%m-%d %H:%M:%S %Z') network timeout — retry in ${INTERVAL}s"
+    sleep "$INTERVAL"
+    continue
+  fi
   echo "asc_ship failed with status $status"
   exit "$status"
 done
