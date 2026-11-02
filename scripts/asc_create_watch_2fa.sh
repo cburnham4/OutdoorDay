@@ -61,7 +61,13 @@ trap cleanup EXIT
 # Open FIFO read/write so neither side blocks on open().
 exec 3<>"$FIFO"
 
-bundle exec ruby -e '
+# Prefer bundle exec; fall back to system ruby+spaceship if vendor bundle is broken.
+RUBY_CMD=(bundle exec ruby)
+if ! bundle check >/dev/null 2>&1; then
+  echo "WARN: bundle check failed — using system ruby/spaceship"
+  RUBY_CMD=(ruby)
+fi
+"${RUBY_CMD[@]}" -e '
 require "spaceship"
 # When rate-limited, skip the SMS PUT and accept the last code via stdin.
 if ENV["ASC_2FA_NO_RESEND"] == "1"

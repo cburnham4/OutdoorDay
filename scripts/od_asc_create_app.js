@@ -57,9 +57,16 @@ async () => {
     }
   }
   const createBtn = [...document.querySelectorAll('button')].find(b => /^(Create|Submit)$/i.test(textOf(b)));
+  let clickedCreate = false;
+  if (createBtn && nameOk && skuOk && bundleOk) {
+    createBtn.click();
+    clickedCreate = true;
+    await sleep(2500);
+  }
   return {
     opened, nameOk, skuOk, bundleOk,
     hasCreate: !!createBtn,
+    clickedCreate,
     url: location.href,
     body: (document.body.innerText || '').slice(0, 900)
   };

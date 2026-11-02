@@ -19,7 +19,7 @@ while true; do
     echo "$(date) restarting watcher NO_RESEND=1" >>"$LOG"
     env \
       SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER='+1 (503) 929-7690' \
-      ASC_2FA_MAX_WAIT=3600 \
+      ASC_2FA_MAX_WAIT=7200 \
       ASC_2FA_POLL_SECONDS=2 \
       ASC_2FA_NO_RESEND=1 \
       FASTLANE_USER=cburnhamiv@gmail.com \
