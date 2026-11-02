@@ -1,0 +1,9 @@
+Outdoor Day is a utility that shows a simple outdoor verdict from location-based UV, pollen, and US AQI (Open-Meteo).
+
+Demo:
+1. Grant location when prompted (or deny and use the last known / error state).
+2. Home screen shows Go / Go with care / Better stay in plus UV, pollen, and AQI chips.
+3. Banner ads appear at the bottom for free users (Google test units in this build).
+4. Tap Outdoor Day Plus to purchase the non-consumable remove-ads unlock (StoreKit product us.letshang.outdoor_day.remove_ads). Sandbox account can be used.
+
+No account required. Not medical advice.
