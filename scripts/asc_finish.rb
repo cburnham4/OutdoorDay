@@ -17,6 +17,7 @@ PRODUCT_ID = "us.letshang.outdoor_day.remove_ads"
 KEY_ID = ENV.fetch("ASC_KEY_ID", "CPZ7YXKKGD")
 ISSUER = ENV.fetch("ASC_ISSUER", "69a6de87-65f4-47e3-e053-5b8c7c11a4d1")
 KEY_PATH = ENV["ASC_KEY_PATH"] || [
+  File.expand_path("../fastlane/AuthKey_CPZ7YXKKGD.p8", __dir__),
   "/Users/carlburnham/Documents/coding/Ios Projects/LetsHangIOS/SunriseSunsetIos/AuthKey_CPZ7YXKKGD.p8",
   "/Users/carlburnham/Documents/coding/TruthFinder/fastlane/AuthKey_CPZ7YXKKGD.p8"
 ].find { |p| File.exist?(p) } || abort("ASC AuthKey .p8 not found; set ASC_KEY_PATH")

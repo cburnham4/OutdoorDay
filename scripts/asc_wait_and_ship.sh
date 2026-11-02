@@ -22,13 +22,7 @@ while true; do
   status=$?
   set -e
   echo "$out"
-  if [[ "$status" -eq 0 ]]; then
-    ruby scripts/asc_finish.rb
-    echo "SHIPPED. Complete App Privacy in ASC UI if prompted (scripts/human_asc_create.md)."
-    notify "Outdoor Day shipped" "Finish App Privacy in App Store Connect, then wait for review."
-    open "https://appstoreconnect.apple.com/apps" >/dev/null 2>&1 || true
-    exit 0
-  fi
+  # Prefer NO_APP detection before success — never treat a missing app as shipped.
   if echo "$out" | grep -q "NO_APP" || [[ "$status" -eq 2 ]]; then
     misses=$((misses + 1))
     echo "$(date '+%Y-%m-%d %H:%M:%S %Z') still NO_APP — sleeping ${INTERVAL}s"
@@ -37,6 +31,13 @@ while true; do
     fi
     sleep "$INTERVAL"
     continue
+  fi
+  if [[ "$status" -eq 0 ]]; then
+    ruby scripts/asc_finish.rb
+    echo "SHIPPED. Complete App Privacy in ASC UI if prompted (scripts/human_asc_create.md)."
+    notify "Outdoor Day shipped" "Finish App Privacy in App Store Connect, then wait for review."
+    open "https://appstoreconnect.apple.com/apps" >/dev/null 2>&1 || true
+    exit 0
   fi
   if echo "$out" | grep -qiE "OpenTimeout|ReadTimeout|ECONNRESET|timed out|execution expired|UNEXPECTED_ERROR|status.?500|ASC apps lookup failed"; then
     echo "$(date '+%Y-%m-%d %H:%M:%S %Z') transient ASC/network error — retry in ${INTERVAL}s"
