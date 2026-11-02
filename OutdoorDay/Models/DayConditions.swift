@@ -45,6 +45,27 @@ struct DayConditions: Equatable {
     }
 }
 
+/// One calendar day in the Outdoor Day Plus outlook.
+struct OutlookDay: Equatable, Identifiable {
+    var id: String { dateKey }
+    var dateKey: String
+    var date: Date
+    var uvIndexMax: Double?
+    var usAqiMax: Int?
+    var pollenGrains: Double?
+    var pollenLabel: String
+
+    var verdict: OutdoorVerdict {
+        VerdictEngine.verdict(uv: uvIndexMax, aqi: usAqiMax, pollen: pollenGrains)
+    }
+
+    var weekdayLabel: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE"
+        return formatter.string(from: date)
+    }
+}
+
 enum RiskBand: String {
     case low = "Low"
     case moderate = "Moderate"

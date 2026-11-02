@@ -168,17 +168,54 @@ struct ContentView: View {
     }
 
     private var premiumOutlookCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Next few days")
                 .font(.headline)
-            Text("You’re on Outdoor Day Plus. A multi-day outlook lands in the next build — today’s verdict stays free for everyone.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            if model.outlook.isEmpty {
+                Text("Pull to refresh for the 3-day outdoor outlook.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(model.outlook) { day in
+                    HStack(alignment: .center, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(day.weekdayLabel)
+                                .font(.subheadline.weight(.semibold))
+                            Text(day.verdict.rawValue)
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(day.verdict.tint)
+                        }
+                        .frame(width: 108, alignment: .leading)
+                        Spacer(minLength: 0)
+                        outlookMetric(title: "UV", value: day.uvIndexMax.map { String(format: "%.0f", $0) } ?? "—")
+                        outlookMetric(title: "AQI", value: day.usAqiMax.map(String.init) ?? "—")
+                        outlookMetric(
+                            title: "Pollen",
+                            value: day.pollenGrains.map { String(format: "%.0f", $0) } ?? "N/A"
+                        )
+                    }
+                    .padding(.vertical, 4)
+                    if day.id != model.outlook.last?.id {
+                        Divider()
+                    }
+                }
+            }
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.white.opacity(0.8))
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+    }
+
+    private func outlookMetric(title: String, value: String) -> some View {
+        VStack(spacing: 2) {
+            Text(title)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.footnote.weight(.semibold))
+        }
+        .frame(minWidth: 44)
     }
 
     private var footnote: some View {
@@ -222,7 +259,7 @@ struct PaywallView: View {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Outdoor Day Plus")
                     .font(.largeTitle.bold())
-                Text("One-time unlock: no ads, and the upcoming 3-day outdoor outlook.")
+                Text("One-time unlock: no ads, plus a 3-day outdoor outlook from UV, pollen, and air quality.")
                     .foregroundStyle(.secondary)
                 if let product = purchases.product {
                     Text(product.displayPrice)

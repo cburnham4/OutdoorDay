@@ -9,6 +9,7 @@ import Foundation
 @MainActor
 final class DayPlannerModel: ObservableObject {
     @Published var conditions: DayConditions?
+    @Published var outlook: [OutlookDay] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var placeName: String?
@@ -46,11 +47,18 @@ final class DayPlannerModel: ObservableObject {
         placeName = location.placeName
         defer { isLoading = false }
         do {
-            conditions = try await client.fetchConditions(
+            let today = try await client.fetchConditions(
                 latitude: coordinate.latitude,
                 longitude: coordinate.longitude
             )
+            conditions = today
             placeName = location.placeName
+            let todayPollen = (label: today.pollenLabel, value: today.pollenGrains)
+            outlook = (try? await client.fetchOutlook(
+                latitude: coordinate.latitude,
+                longitude: coordinate.longitude,
+                todayPollen: todayPollen
+            )) ?? []
         } catch {
             errorMessage = "Couldn’t load outdoor conditions. Pull to try again."
         }
