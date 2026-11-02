@@ -31,8 +31,8 @@ LOG=build/asc_create_watch.log
 cleanup() { rm -f "$FIFO"; }
 trap cleanup EXIT
 
-# Writer opens first so ruby reader does not block forever on open().
-exec 3>"$FIFO"
+# Open FIFO read/write so neither side blocks on open().
+exec 3<>"$FIFO"
 
 bundle exec ruby -e '
 require "spaceship"
