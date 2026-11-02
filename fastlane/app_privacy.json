@@ -1,0 +1,40 @@
+{
+  "privacyType": "DATA_USED_TO_TRACK_YOU",
+  "note": "AdMob may use device advertising identifiers for ads. Location is Precise Location for app functionality only (not tracking). No account/contact data collected by Outdoor Day itself.",
+  "dataCategories": [
+    {
+      "category": "LOCATION",
+      "types": [
+        "PRECISE_LOCATION"
+      ],
+      "purposes": [
+        "APP_FUNCTIONALITY"
+      ],
+      "linkedToUser": false,
+      "usedForTracking": false
+    },
+    {
+      "category": "IDENTIFIERS",
+      "types": [
+        "DEVICE_ID"
+      ],
+      "purposes": [
+        "THIRD_PARTY_ADVERTISING"
+      ],
+      "linkedToUser": false,
+      "usedForTracking": true
+    },
+    {
+      "category": "USAGE_DATA",
+      "types": [
+        "PRODUCT_INTERACTION"
+      ],
+      "purposes": [
+        "THIRD_PARTY_ADVERTISING",
+        "ANALYTICS"
+      ],
+      "linkedToUser": false,
+      "usedForTracking": true
+    }
+  ]
+}
