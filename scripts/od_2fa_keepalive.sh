@@ -23,6 +23,8 @@ while true; do
       ASC_2FA_POLL_SECONDS=2 \
       ASC_2FA_NO_RESEND=1 \
       FASTLANE_USER=cburnhamiv@gmail.com \
+      OD_GEM_HOME="${OD_GEM_HOME:-$HOME/.gem/ruby/4.0.0-od-clean}" \
+      LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
       bash scripts/asc_create_watch_2fa.sh >> build/asc_create_watch_runner.log 2>&1 &
     sleep 20
   fi

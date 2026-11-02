@@ -61,20 +61,25 @@ trap cleanup EXIT
 # Open FIFO read/write so neither side blocks on open().
 exec 3<>"$FIFO"
 
-# Prefer bundle exec; fall back to system ruby+spaceship if vendor bundle is broken.
-RUBY_CMD=(bundle exec ruby)
-if ! bundle check >/dev/null 2>&1; then
-  echo "WARN: bundle check failed — using system ruby/spaceship"
-  RUBY_CMD=(ruby)
-fi
-"${RUBY_CMD[@]}" -e '
+# Isolated gem home — vendor/bundle babosa SIGBUS under Rosetta x86_64 ruby,
+# and the shared gem path hits google-apis-core version conflicts.
+OD_GEM_HOME="${OD_GEM_HOME:-$HOME/.gem/ruby/4.0.0-od-clean}"
+run_spaceship_ruby() {
+  env -u BUNDLE_GEMFILE -u BUNDLE_BIN_PATH -u BUNDLE_PATH -u RUBYOPT \
+    BUNDLE_IGNORE_CONFIG=1 \
+    GEM_HOME="$OD_GEM_HOME" \
+    GEM_PATH="$OD_GEM_HOME" \
+    ruby "$@"
+}
+echo "Using ruby/spaceship from $OD_GEM_HOME"
+run_spaceship_ruby -e '
 require "spaceship"
 # When rate-limited, skip the SMS PUT and accept the last code via stdin.
 if ENV["ASC_2FA_NO_RESEND"] == "1"
   Spaceship::Client.class_eval do
     alias_method :__od_request_2fa_phone, :request_two_factor_code_from_phone
     def request_two_factor_code_from_phone(phone_id, phone_number, code_length, push_mode = "sms", should_request_code = true)
-      puts "NO_RESEND — enter last code for #{phone_number}"
+      puts "NO_RESEND - enter last code for #{phone_number}"
       $stdout.flush
       __od_request_2fa_phone(phone_id, phone_number, code_length, push_mode, false)
     end
